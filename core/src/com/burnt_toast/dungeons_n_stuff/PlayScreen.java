@@ -22,6 +22,7 @@ public class PlayScreen implements Screen, InputProcessor{
 	private OrthogonalTiledMapRenderer otmr;
 	private TiledMap mazeMap;
 	private MapCreationTool mapTool;
+	private MiniMap miniMap;
 	private static int[][] collisionMap;
 	private Stage playStage;
 	private Stage hudStage;
@@ -60,6 +61,10 @@ public class PlayScreen implements Screen, InputProcessor{
 		otmr = new OrthogonalTiledMapRenderer(mazeMap);
 		pause = false;
 		
+		miniMap = new MiniMap(new TextureRegion(main.mainTileset, 65, 33, 1, 1), //unseen
+				new TextureRegion(main.mainTileset, 65, 32, 1, 1),//seen
+				new TextureRegion(main.mainTileset, 64, 32, 1, 1),//you are here
+				hudStage.getWidth()/2, hudStage.getHeight()/2);
 		collisionMap = new int[50][50];
 		
 		//DRAG STUFF
@@ -93,6 +98,7 @@ public class PlayScreen implements Screen, InputProcessor{
 		currentPlayer.setDirection('u');//up at default.
 		main.addInputProcessor(this);
 		loadMap();
+		miniMap.setMidOfScreen(hudStage.getWidth()/2, hudStage.getHeight()/2);
 		
 	}
 
@@ -129,6 +135,7 @@ public class PlayScreen implements Screen, InputProcessor{
 		hudStage.getBatch().begin();
 		hudStage.getBatch().draw(healthBorder, hudStage.getWidth()/2, hudStage.getHeight()-35,
 				healthBorder.getRegionWidth() * 3, healthBorder.getRegionHeight() * 3);
+		miniMap.draw((SpriteBatch)hudStage.getBatch());
 		hudStage.getBatch().end();
 		
 		
@@ -208,8 +215,10 @@ public class PlayScreen implements Screen, InputProcessor{
 			}
 			System.out.println();
 		}
+
 		this.collisionMap = mapTool.prepareMap(10);
-	}
+		this.miniMap.setMap(mapTool.getSmallCollisionMap());
+	}//end load map
 	public void buttonCode(String buttonName){
 		
 	}
@@ -289,6 +298,10 @@ public class PlayScreen implements Screen, InputProcessor{
 		else if(keycode == Keys.D){
 			currentPlayer.setDirection('r');
 			currentPlayer.setIfMoving(true);
+			return true;
+		}
+		else if(keycode == Keys.M){
+			miniMap.toggleIfOnScreen();
 			return true;
 		}
 		return false;

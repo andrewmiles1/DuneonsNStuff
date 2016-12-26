@@ -186,6 +186,9 @@ public class MapCreationTool {
 		//visualLayer.getCell(1, 2).setTile(this.middleBrickTile); UP
 		//visualLayer.getCell(2, 1).setTile(this.middleBrickTile); RIGHT
 	}
+	public int[][] getSmallCollisionMap(){
+		return smallCollisionMap;
+	}
 	
 	/**
 	 * The only parameter is the SMALL version of the size. 

@@ -45,6 +45,23 @@ public class MiniMap {
 	public boolean getIfOnScreen(){
 		return visible;
 	}
+	public void setIfOnScreen(boolean isVisible){
+		visible = isVisible;
+	}
+	public boolean toggleIfOnScreen(){
+		if(visible){
+			visible = false;
+			return false;
+		}
+		else{
+			visible = true;
+			return true;
+		}
+	}
+	public void setMidOfScreen(float passMidOfScreenX, float passMidOfScreenY){
+		this.midOfScreenX = passMidOfScreenX;
+		this.midOfScreenY = passMidOfScreenY;
+	}
 	public void activateBlock(int x, int y){
 		playerXnY.x = x;
 		playerXnY.y = y;
@@ -83,8 +100,16 @@ public class MiniMap {
 	}
 	
 	public void draw(SpriteBatch batch){
+		if(!visible)return;
 		for(int i = 0; i < textMap[0].length; i ++){
 			for( int k = 0; k < textMap[0].length; k++){//textMap[0] because the width & height is same
+				if(i == playerXnY.x && k == playerXnY.y){
+					batch.draw(this.youAreHerePic,
+							midOfScreenX/2 - (textMap[0].length * miniTileSize / 2) + miniTileSize * i,
+							midOfScreenY/2 + (textMap[0].length * miniTileSize / 2) - miniTileSize * k,
+							miniTileSize, miniTileSize);
+					continue;
+				}
 				if(visibilityMap[i][k] == 1 || visibilityMap[i][k] == 0){
 					batch.draw(this.unseenTilePic,
 							midOfScreenX/2 - (textMap[0].length * miniTileSize / 2) + miniTileSize * i,
@@ -96,8 +121,8 @@ public class MiniMap {
 							midOfScreenX/2 - (textMap[0].length * miniTileSize / 2) + miniTileSize * i,
 							midOfScreenY/2 + (textMap[0].length * miniTileSize / 2) - miniTileSize * k,
 							miniTileSize, miniTileSize);
-				}
-			}
-		}
-	}
+				}//end if visible
+			}//end for k
+		}//end for i
+	}//end draw
 }
