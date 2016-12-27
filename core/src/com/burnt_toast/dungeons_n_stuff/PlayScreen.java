@@ -61,9 +61,9 @@ public class PlayScreen implements Screen, InputProcessor{
 		otmr = new OrthogonalTiledMapRenderer(mazeMap);
 		pause = false;
 		
-		miniMap = new MiniMap(new TextureRegion(main.mainTileset, 65, 33, 1, 1), //unseen
-				new TextureRegion(main.mainTileset, 65, 32, 1, 1),//seen
-				new TextureRegion(main.mainTileset, 64, 32, 1, 1),//you are here
+		miniMap = new MiniMap(new TextureRegion(main.mainTileset, 65, 34, 1, 1), //seen
+				new TextureRegion(main.mainTileset, 65, 32, 1, 1),//unseen
+				new TextureRegion(main.mainTileset, 64, 34, 1, 1),//you are here
 				hudStage.getWidth()/2, hudStage.getHeight()/2);
 		collisionMap = new int[50][50];
 		
@@ -99,7 +99,7 @@ public class PlayScreen implements Screen, InputProcessor{
 		main.addInputProcessor(this);
 		loadMap();
 		miniMap.setMidOfScreen(hudStage.getWidth()/2, hudStage.getHeight()/2);
-		
+		miniMap.activateBlock(1, 1);
 	}
 
 	@Override
@@ -147,6 +147,9 @@ public class PlayScreen implements Screen, InputProcessor{
 		heightWithZoom = playStage.getHeight() * ((OrthographicCamera)(playStage.getCamera())).zoom;
 		currentPlayer.update();
 		orthoCam.position.set(currentPlayer.getX(), currentPlayer.getY(), 0);
+		miniMap.update();
+		miniMap.activateBlock(round(currentPlayer.getX(),  24, false)/24,
+				round(currentPlayer.getY(), 24, false)/24);
 		
 		
 		
@@ -217,7 +220,7 @@ public class PlayScreen implements Screen, InputProcessor{
 		}
 
 		this.collisionMap = mapTool.prepareMap(10);
-		this.miniMap.setMap(mapTool.getSmallCollisionMap());
+		this.miniMap.setMapVerbose(mapTool.getSmallCollisionMap(), true);
 	}//end load map
 	public void buttonCode(String buttonName){
 		
