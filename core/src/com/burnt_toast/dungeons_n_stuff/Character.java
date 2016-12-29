@@ -43,7 +43,7 @@ public abstract class Character {
 	
 	public Character(TextureRegion[] frames){//i pass the frames for sizes
 		movementSpeed = 32;//32 pixels per second.
-		animationSpeed = 0.33f;//animates every third a second.
+		animationSpeed = 0.25f;//animates every fourth a second.
 		collisionRect = new Rectangle(0, 0, frames[1].getRegionWidth(), frames[1].getRegionHeight() / 2);
 		meleeRect = new Rectangle(0, 0, frames[1].getRegionWidth(), frames[1].getRegionHeight());
 		frameSizeX = frames[1].getRegionWidth();
